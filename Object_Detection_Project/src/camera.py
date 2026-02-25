@@ -1,7 +1,10 @@
 import cv2
 
 class Camera:
-    def __init__(self, index = None,width=640,height =480, max_indexes = 100):
+    def __init__(self, index = None,width=640,height =480, max_indexes = 10):
+
+        #force the camera
+        
         """
         index=None -> auto-detect camera(prefered)
         index=int -> force a specific camera index
@@ -14,6 +17,11 @@ class Camera:
 
         if not self.cap.isOpened():
             raise RuntimeError(f"Camera index {self.index} not available")
+
+        ret, _ = self.cap.read()
+        if not ret:
+            self.cap.release()
+            raise RuntimeError(f"Camera index {self.index} opened but no frames")
 
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH,width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT,height)
@@ -28,12 +36,13 @@ class Camera:
         - 0 = laptop webcam
         - 1 or 2 = Iriun (phone)
         """
-        for i in range(1,max_indexes):
+        for i in range(max_indexes):
             cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
-            if cap.isOpened():
-                cap.release()
-                return i
+            ret, _ = cap.read()
             cap.release()
+            if ret:
+                return i
+        return None
 
         cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
         if cap.isOpened():

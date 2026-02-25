@@ -124,7 +124,7 @@ class App(tk.Tk):
             return
 
         idx = int(self.camera_index.get())
-        self.cap = Camera(index= 1)
+        self.cap = Camera()
 
         self.running = True
         self.prev_box = None
@@ -169,8 +169,11 @@ class App(tk.Tk):
 
 
     def _loop(self):
+        
         if not self.running or self.cap is None:
             return
+
+        
 
         frame =self.cap.read()
         

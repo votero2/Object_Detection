@@ -10,7 +10,7 @@ def run_capture(label: str):
   SAVE_DIR.mkdir(parents = True, exist_ok = True)
 
   print("Saving images to: ", SAVE_DIR)
-  cam = Camera(index = 1) # force iriun index
+  cam = Camera() # force iriun index
 
   count = 0
   print("CLICK the video window first, then press:")
